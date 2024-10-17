@@ -1,26 +1,40 @@
-// Enum Types mini-challenge
-// Replace the value of loyaltyUser to a GOLD_USER, SILVER_USER or BRONZE_USER, making sure to
-// use what we learnt about Enums in the previous lesson. Make Sheia GOLD, Andrzej BRONZE 
-// and Omar SILVER.
-// 2. export the enum
-// 3. Fix the function in the utils to show Sheias star as she is a GOLD_USER.
-
-import { showReviewTotal, populateUser } from './utils'
-import { Permissions, LoyaltyUser } from './enums'
+// Wrapping up our Dashboard
+// 1. Create All the other interfaces you think are needed for this board
+// 2. Using the Class, visually show the main Image above the review button.
+import { showReviewTotal, populateUser, showDetails, getTopTwoReviews} from './utils'
+import { Price, Country } from './types'
+import { Permissions , LoyaltyUser } from './enums'
+import  Review  from './interfaces'
 const propertyContainer = document.querySelector('.properties')
+const reviewContainer = document.querySelector('.reviews')
+const container = document.querySelector('.container')
+const button = document.querySelector('button')
 const footer = document.querySelector('.footer')
 
-let isOpen: boolean
+let isLoggedIn: boolean
 
-// Reviews
-const reviews : { 
+enum Permissions {
+    ADMIN = 'ADMIN', 
+    READ_ONLY = 'READ_ONLY'
+}
+
+enum LoyaltyUser {
+    GOLD_USER = 'GOLD_USER',
+    SILVER_USER = 'SILVER_USER',
+    BRONZE_USER = 'BRONZE_USER'
+}
+
+interface Review {
     name: string; 
     stars: number; 
     loyaltyUser: LoyaltyUser; 
-    date: string
-    }[] = [
+    date: string;   
+}
+
+// Reviews
+const reviews: Review[] = [
     {
-        name: 'Sheia',
+        name: 'Sheila',
         stars: 5,
         loyaltyUser: LoyaltyUser.GOLD_USER,
         date: '01-04-2021'
@@ -35,7 +49,7 @@ const reviews : {
         name: 'Omar',
         stars: 4,
         loyaltyUser: LoyaltyUser.SILVER_USER,
-        date: '27-03-2021'
+        date: '27-03-2021',
     },
 ]
 
@@ -48,21 +62,22 @@ const you = {
     stayedAt: ['florida-home', 'oman-flat', 'tokyo-bungalow']
 }
 
-
-// Array of Properties
-const properties : {
+interface Property {
     image: string;
     title: string;
-    price: number;
+    price: Price;
     location: {
         firstLine: string;
         city: string;
-        code: number;
-        country: string;
-    };
-    contact: [ number, string ];
+        code: number | string;
+        country: Country
+    }
+    contact: [ number, string];
     isAvailable: boolean;
-}[] = [
+}
+
+// Array of Properties
+const properties : Property[] = [
     {
         image: 'colourful-mexican-house.jpg',
         title: 'Colombian Shack',
@@ -79,7 +94,7 @@ const properties : {
     {
         image: 'small-house-with-red-roof-sits-lush-green-field-generate-ai-image.jpg',
         title: 'Polish Cottage',
-        price: 34,
+        price: 30,
         location: {
             firstLine: 'no 23',
             city: 'Gdansk',
@@ -92,18 +107,17 @@ const properties : {
     {
         image: 'low-angle-view-buildings-against-sky.jpg',
         title: 'London Flat',
-        price: 23,
+        price: 25,
         location: {
             firstLine: 'flat 15',
             city: 'London',
-            code: 35433,
+            code: 'SW4 5XW',
             country: 'United Kingdom',
         },
         contact: [+34829374892553, 'andyluger@aol.com'],
         isAvailable: true
     }
 ]
-
 
 // Functions
 showReviewTotal(reviews.length, reviews[0].name, reviews[0].loyaltyUser)
@@ -118,12 +132,53 @@ for (let i = 0; i < properties.length; i++) {
     const image = document.createElement('img')
     image.setAttribute('src', properties[i].image)
     card.appendChild(image)
+    showDetails(you.permissions, card, properties[i].price)
     propertyContainer.appendChild(card)
 }
 
-// use your location, your current time, and the current temperature of your
-// location
-let currentLocation: [string, string, number] = ['London', '11:35', 17]
+let count = 0
+function addReviews(array : Review[]) : void {
+    if (!count ) {
+        count++
+        const topTwo = getTopTwoReviews(array)
+        for (let i = 0; i < topTwo.length; i++) {
+            const card = document.createElement('div')
+            card.classList.add('review-card')
+            card.innerHTML = topTwo[i].stars + ' stars from ' + topTwo[i].name
+            reviewContainer.appendChild(card)
+        }
+        container.removeChild(button) 
+    }
+}
+
+button.addEventListener('click', () => addReviews(reviews))
+
+let currentLocation : [string, string, number] = ['London', '11.03', 17]
 footer.innerHTML = currentLocation[0] + ' ' + currentLocation[1] + ' ' + currentLocation[2] + '°'
 
+// Classes
+class MainProperty {
+    src: string
+    title: string
+    reviews: Review[]
+    constructor(src: string, title: string, reviews: Review[]) {
+        this.src = src
+        this.title = title
+        this.reviews = reviews
+    }
+}
 
+let yourMainProperty = new MainProperty(
+    'images/italian-property.jpg', 
+    'Italian House',
+    [{
+        name: 'Olive',
+        stars: 5,
+        loyaltyUser: LoyaltyUser.GOLD_USER,
+        date: '12-04-2021'
+    }] )
+
+const mainImageContainer = document.querySelector('.main-image')
+const image = document.createElement('img')
+image.setAttribute('src', yourMainProperty.src)
+mainImageContainer.appendChild(image)
