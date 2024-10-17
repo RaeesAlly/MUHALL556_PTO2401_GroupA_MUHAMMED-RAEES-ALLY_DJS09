@@ -65,7 +65,7 @@ const properties : {
     isAvailable: boolean;
 }[] = [
     {
-        image: 'images/colombia-property.jpg',
+        image: 'colourful-mexican-house.jpg',
         title: 'Colombian Shack',
         price: 45,
         location: {
@@ -78,7 +78,7 @@ const properties : {
         isAvailable: true  
     },
     {
-        image: 'images/poland-property.jpg',
+        image: 'small-house-with-red-roof-sits-lush-green-field-generate-ai-image.jpg',
         title: 'Polish Cottage',
         price: 34,
         location: {
@@ -91,7 +91,7 @@ const properties : {
         isAvailable: false 
     },
     {
-        image: 'images/london-property.jpg',
+        image: 'low-angle-view-buildings-against-sky.jpg',
         title: 'London Flat',
         price: 23,
         location: {
