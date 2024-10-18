@@ -7,7 +7,7 @@ import MainProperty from './classes'
 const propertyContainer = document.querySelector('.properties')
 const reviewContainer = document.querySelector('.reviews')
 const container = document.querySelector('.container')
-const button = document.querySelector('button')
+const button:any = document.querySelector('button')
 const footer = document.querySelector('.footer')
 
 let isLoggedIn: boolean
@@ -110,10 +110,10 @@ for (let i = 0; i < properties.length; i++) {
     card.classList.add('card')
     card.innerHTML = properties[i].title
     const image = document.createElement('img')
-    image.setAttribute('src', properties[i].image)
+    image.setAttribute('src',"images/"+ properties[i].image)
     card.appendChild(image)
     showDetails(you.permissions, card, properties[i].price)
-    propertyContainer.appendChild(card)
+    propertyContainer?.appendChild(card)
 }
 
 let count = 0
@@ -125,20 +125,21 @@ function addReviews(array : Review[]) : void {
             const card = document.createElement('div')
             card.classList.add('review-card')
             card.innerHTML = topTwo[i].stars + ' stars from ' + topTwo[i].name
-            reviewContainer.appendChild(card)
+            reviewContainer?.appendChild(card)
         }
-        container.removeChild(button) 
+        container?.removeChild(button) 
     }
 }
 
 button.addEventListener('click', () => addReviews(reviews))
 
 let currentLocation : [string, string, number] = ['London', '11.03', 17]
+if(footer)
 footer.innerHTML = currentLocation[0] + ' ' + currentLocation[1] + ' ' + currentLocation[2] + '°'
 
 
 let yourMainProperty = new MainProperty(
-    'images/italian-property.jpg', 
+    'images/beautiful-coastal-towns-italy-scenic-amalfi-village-amalfi-coast.jpg', 
     'Italian House',
     [{
         name: 'Olive',
@@ -150,4 +151,5 @@ let yourMainProperty = new MainProperty(
 const mainImageContainer = document.querySelector('.main-image')
 const image = document.createElement('img')
 image.setAttribute('src', yourMainProperty.src)
-mainImageContainer.appendChild(image)
+image.setAttribute('height', "128" )
+mainImageContainer?.appendChild(image)
